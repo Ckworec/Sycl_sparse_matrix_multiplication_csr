@@ -5,6 +5,7 @@
 #include <string>
 #include <chrono>
 #include <fstream>
+#include <algorithm>
 #include <mkl.h>
 
 #define eps 1e-20
@@ -20,12 +21,12 @@ public:
 
     CSRMatrix() : CSRMatrix(0, 0) {}
 
-    CSRMatrix(int rows, int cols) : rows(rows), cols(cols) {
+    CSRMatrix(int rows, int cols) : rows(rows), cols(cols), non_zero_el(0) {
         row_ptr.resize(rows + 1, 0);
     }
 
-    CSRMatrix(int r, int c, const std::vector<int>& rp, const std::vector<int>& ci, const std::vector<double>& v)
-        : rows(r), cols(c), row_ptr(rp), col_ind(ci), values(v) {}
+    CSRMatrix(int r, int c, const std::vector<int>& rp, const std::vector<int>& ci, const std::vector<double>& v, int nze)
+        : rows(r), cols(c), row_ptr(rp), col_ind(ci), values(v), non_zero_el(nze) {}
 
     // Функция для чтения матрицы из файла
     static CSRMatrix readFromFile(const std::string& filename) {
@@ -80,6 +81,8 @@ public:
         // Новые размеры
         int transposed_rows = cols;
         int transposed_cols = rows;
+        int non_z_e = non_zero_el;
+
 
         // Количество ненулевых элементов в каждом столбце исходной матрицы (т.е. строке транспонированной)
         std::vector<int> row_count(transposed_rows, 0);
@@ -115,7 +118,7 @@ public:
             }
         }
 
-        return CSRMatrix(transposed_rows, transposed_cols, transposed_row_ptr, transposed_col_ind, transposed_values);
+        return CSRMatrix(transposed_rows, transposed_cols, transposed_row_ptr, transposed_col_ind, transposed_values, non_z_e);
     }
 };
 
