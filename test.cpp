@@ -62,25 +62,25 @@ int main()
             }
         });
 
-        // sparse_status_t status = mkl_sparse_d_create_csr(&A_csr_mkl, SPARSE_INDEX_BASE_ZERO, 
-        //                         A.rows, A.cols, 
-        //                         A.row_ptr.data(), A.row_ptr.data() + 1, 
-        //                         A.col_ind.data(), A.values.data());
+        /*sparse_status_t status = mkl_sparse_d_create_csr(&A_csr_mkl, SPARSE_INDEX_BASE_ZERO, 
+                                A.rows, A.cols, 
+                                A.row_ptr.data(), A.row_ptr.data() + 1, 
+                                A.col_ind.data(), A.values.data());
 
-        // if (status != SPARSE_STATUS_SUCCESS) {
-        //     printf("Ошибка при создании CSR матрицы\n");
-        //     return -1;
-        // }
+        if (status != SPARSE_STATUS_SUCCESS) {
+            printf("Ошибка при создании CSR матрицы\n");
+            return -1;
+        }
 
-        // status = mkl_sparse_d_create_csr(&B_csr_mkl, SPARSE_INDEX_BASE_ZERO, 
-        //                         B.rows, B.cols, 
-        //                         B.row_ptr.data(), B.row_ptr.data() + 1, 
-        //                         B.col_ind.data(), B.values.data());
+        status = mkl_sparse_d_create_csr(&B_csr_mkl, SPARSE_INDEX_BASE_ZERO, 
+                                B.rows, B.cols, 
+                                B.row_ptr.data(), B.row_ptr.data() + 1, 
+                                B.col_ind.data(), B.values.data());
         
-        // if (status != SPARSE_STATUS_SUCCESS) {
-        //     printf("Ошибка при создании CSR матрицы\n");
-        //     return -1;
-        // }
+        if (status != SPARSE_STATUS_SUCCESS) {
+            printf("Ошибка при создании CSR матрицы\n");
+            return -1;
+        }*/
 
         auto start = std::chrono::high_resolution_clock::now();
         CSRMatrix C_csr_cpu;
@@ -101,16 +101,6 @@ int main()
         end = std::chrono::high_resolution_clock::now();
         auto mkl_res = std::chrono::duration<double>(end - start).count();
         std::cout << "MKL result: " << mkl_res << " seconds" << std::endl;
-
-        /*// Проверяем корректность вычислений
-        if (C_csr_gpu.row_ptr != C_csr_cpu.row_ptr && C_csr_gpu.col_ind != C_csr_cpu.col_ind && C_csr_gpu.values != C_csr_cpu.values
-            && C_csr_mkl -> rowIndex != C_csr_gpu.row_ptr && C_csr_mkl -> columns != C_csr_gpu.col_ind && C_csr_mkl -> values != C_csr_gpu.values){
-            std::cout << "Results aren't correct!" << std::endl;
-        }
-        else
-        {
-            std::cout << "Results are correct!" << std::endl;
-        }*/
         
         mkl_sparse_d_export_csr(C_csr_mkl, &indexing, &rows, &cols, &rows_start, &rows_end, &columns, &values);
 

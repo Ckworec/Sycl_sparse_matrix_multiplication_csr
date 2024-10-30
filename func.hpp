@@ -17,7 +17,7 @@ public:
     std::vector<int> row_ptr;   // Указатели на начало строк
     std::vector<int> col_ind;   // Индексы столбцов ненулевых элементов
     std::vector<double> values;  // Ненулевые значения
-    int rows, cols, non_zero_el;             // Размеры матрицы
+    int rows, cols, non_zero_el; // Размеры матрицы, количсетво не нулевых элементов
 
     CSRMatrix() : CSRMatrix(0, 0) {}
 
@@ -26,7 +26,9 @@ public:
     }
 
     CSRMatrix(int r, int c, const std::vector<int>& rp, const std::vector<int>& ci, const std::vector<double>& v, int nze)
-        : rows(r), cols(c), row_ptr(rp), col_ind(ci), values(v), non_zero_el(nze) {}
+        : rows(r), cols(c), row_ptr(rp), col_ind(ci), values(v), non_zero_el(nze) {
+            row_ptr.resize(rows + 1, 0);
+    }
 
     // Функция для чтения матрицы из файла
     static CSRMatrix readFromFile(const std::string& filename) {
