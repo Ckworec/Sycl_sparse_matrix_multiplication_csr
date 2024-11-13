@@ -7,8 +7,9 @@
 #include <fstream>
 #include <algorithm>
 #include <mkl.h>
+#include <iomanip>
 
-#define eps 1e-20
+#define eps 1e-10
 
 using namespace sycl;
 
